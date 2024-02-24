@@ -15,6 +15,7 @@ import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/api/products")
+@CrossOrigin
 public class ProductController {
     @Autowired
     private IProductService productService;
@@ -35,6 +36,24 @@ public class ProductController {
 
     @GetMapping("/find/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id){
+        Optional<Product> productOptional = productService.findById(id);
+
+        if (productOptional.isPresent()){
+            Product product = productOptional.get();
+            ProductDTO productDTO = ProductDTO.builder()
+                    .id(product.getId())
+                    .name(product.getName())
+                    .price(product.getPrice())
+                    .build();
+
+            return ResponseEntity.ok(productDTO);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchById(@RequestParam Long id){
         Optional<Product> productOptional = productService.findById(id);
 
         if (productOptional.isPresent()){

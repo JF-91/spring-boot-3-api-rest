@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/makers")
+@CrossOrigin
 public class MakerController {
 
     @Autowired
